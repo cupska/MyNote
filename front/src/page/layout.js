@@ -7,7 +7,7 @@ import { MemoLogo } from "../assets/memoLogo";
 
 export function Layout() {
     const [btnAnimation, setBtnAnimation] = useState("")
-    const [isBtn1Pressed, setIsBtn1Pressed] = useState(false)
+    const [isBtn1Pressed, setIsBtn1Pressed] = useState(true)
     const [isBtn2Pressed, setIsBtn2Pressed] = useState(false)
     const [isBtn3Pressed, setIsBtn3Pressed] = useState(false)
 
