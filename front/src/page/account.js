@@ -1,7 +1,7 @@
 
 
 
-export function Account(props){
+export function About(props){
     
     return(
         <div className=" flex flex-col justify-center h-full">

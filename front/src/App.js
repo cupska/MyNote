@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { Account } from './page/account';
+import { About } from './page/account';
 import { MyList } from './page/myList';
 import { MyMemo } from './page/myMemo';
 import { Layout } from './page/layout';
@@ -16,7 +16,7 @@ function App() {
               <Route path='myList' element={<MyList/>}/>
               <Route path='myMemo' element={<MyMemo/>}/>
               <Route path='myMemo/card' element={<MyMemoCard/>}/>
-              <Route path='account' element={<Account/>}/>
+              <Route path='about' element={<About/>}/>
             </Route>
           </Routes>
         </BrowserRouter>
