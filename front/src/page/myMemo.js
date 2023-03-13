@@ -14,6 +14,9 @@ export function MyMemo(props) {
         fetch(url)
         .then(res => res.json())
         .then(res => setDatas(res)) 
+        .catch(err => console.log(err))
+
+        setDoUpdate(false)
     }, [doUpdate])
 
 
@@ -45,6 +48,7 @@ export function MyMemo(props) {
             {isBtnAddListOn ? <PostForm update={update}/> : null} 
         </div>
 
+    console.log(doUpdate)
     return(
         <div className=" relative h-full w-full  py-5 px-2">
             {/* container card */}
@@ -77,10 +81,9 @@ function PostForm(props) {
 
     useEffect(() => {
         setTime(dates)
-    }, [])
+    }, [dates])
  
     const waw = () => setTime(`${d.getFullYear()}`)
-        // `${d.getDay()}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`)
 
 
     const postForm = () => {
@@ -104,7 +107,7 @@ function PostForm(props) {
         });
     }
 
-    console.log(time)
+    // console.log(time)
     return (
         <form className=" flex flex-col w-full ring-2 mt-2 divide-y-2" onSubmit={(e)=> {
                 e.preventDefault()

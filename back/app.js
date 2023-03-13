@@ -1,21 +1,12 @@
-const { response } = require("express")
 const express = require("express")
-const { get } = require("http")
 const app = express()
 const port = 3009 
 const db = require('./src/database')
 const bodyParser = require("body-parser")
 const cors = require('cors')
 
-app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded())
 app.use(express.json())
-// app.use(express.urlencoded())
 app.use(cors())
-
-app.get("/login", (req, res)=>{
-    res.send("wawwwd")
-})
 
 app.get('/mylists', (req, res)=> {
     const sql = "SELECT * FROM mylist" ;
@@ -31,7 +22,6 @@ app.get('/mylists', (req, res)=> {
 
 app.post('/mylists', (req, res)=> {
     const {task, warn} = req.body
-    // const sql = "INSERT INTO `mylist`(`task`, `warn`, `color`) VALUES ('[value-1]','[value-2]','[value-3]')"
     const sql = `INSERT INTO mylist (task, warn) VALUES ('${task}', '${warn}')`
     db.query(sql, (err, response)=> {
         if (err) throw err

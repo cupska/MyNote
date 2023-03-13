@@ -46,7 +46,7 @@ export function Layout() {
                     </div>
                     <span className={` text-rose-600 ${isBtn2Pressed ? "duration-500" : "-translate-y-3 opacity-0 duration-500"}`}>MyMemo</span>
                 </Link>
-                <Link className=" flex flex-col items-center flex-1 py-4  text-center" to="account" onClick={()=> {
+                <Link className=" flex flex-col items-center flex-1 py-4  text-center" to="about" onClick={()=> {
                     setBtnAnimation("translate-x-[200%]")
                     setIsBtn1Pressed(false)
                     setIsBtn2Pressed(false)
