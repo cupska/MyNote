@@ -11,6 +11,7 @@ export function CardList(props) {
     const deleteCard = () => {
         fetch("http://localhost:3009/mylists", {
             method: "DELETE",
+            credentials: "include",
             headers: {
             'Content-Type': 'application/json'
             },

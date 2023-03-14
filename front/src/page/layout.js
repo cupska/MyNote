@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { AccountLogo } from "../assets/account logo";
 import { ListLogo } from "../assets/listLogo";
@@ -12,9 +12,11 @@ export function Layout() {
     const [isBtn3Pressed, setIsBtn3Pressed] = useState(false)
 
     const navigate = useNavigate()
-    window.addEventListener("load", () => {
-        navigate("/myList")
-    })
+    useEffect(() => {
+        window.addEventListener("load", () => {
+            navigate("/myList")
+        })
+    }, [navigate])
     return(
         <div className=" flex flex-col justify-start w-screen h-screen md:h-[37rem] md:w-[27rem] md:shadow-lg md:hover:shadow-2xl md:shadow-slate-600 md:hover:shadow-slate-600 duration-500  md:rounded-lg md:overflow-hidden  bg-slate-100">
             <header className="  flex justify-center items-center h-[10%]  bg-gradient-to-bl from-rose-500  to-purple-700 shadow-[-0rem_-0.7rem_1.5rem_0.1rem]">

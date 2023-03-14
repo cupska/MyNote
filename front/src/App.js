@@ -6,12 +6,14 @@ import { MyList } from './page/myList';
 import { MyMemo } from './page/myMemo';
 import { Layout } from './page/layout';
 import { MyMemoCard } from './page/myMemoCard';
+import { Auth } from './page/auth/auth';
 
 function App() {
   return (
     <div className="App polka flex justify-center items-center min-h-screen ">
       <BrowserRouter>
           <Routes>
+            <Route path='/auth' element={<Auth/>}/>
             <Route path="/" element={<Layout/>}>
               <Route path='myList' element={<MyList/>}/>
               <Route path='myMemo' element={<MyMemo/>}/>
