@@ -61,7 +61,7 @@ app.post('/mymemos', (req, res)=> {
         if (err) throw err
         console.log(response)
     })
-    console.log(`${title} ${description} ${time} `)
+    // console.log(`${title} ${description} ${time} `)
     res.send({
         message : "Post data berhasill !!!"
     }) 
