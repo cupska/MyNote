@@ -9,17 +9,15 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 
 
-
-// SESI LOGIN DENGAN GOOGLE
-
-require('./auth')
-
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
   }));
+
+// SESI LOGIN DENGAN GOOGLE
+require('./auth')
 
 function isLoggedIn(req, res, next) {
     req.user ? next() : res.sendStatus(401)
@@ -52,7 +50,7 @@ app.get('/auth/google/success',isLoggedIn , (req, res) => {
     const {id, given_name, email} = req.user
     const accessToken = req.cookies['connect.sid']
     const date = new Date()
-    const sql = `INSERT INTO user (userId, name, email, accessToken, modified) VALUES ("${id}", "${given_name}", "${email}", "${accessToken}", "")`
+    const sql = `INSERT INTO user (userId, name, email, accessToken) VALUES ("${id}", "${given_name}", "${email}", "${accessToken}" )`
     db.query(sql, (err, results) => {
         if (err) {
             const sql = `UPDATE user SET accessToken = "${accessToken}" WHERE userId = "${id}"`
@@ -61,35 +59,48 @@ app.get('/auth/google/success',isLoggedIn , (req, res) => {
                     res.status(500).send('masalah diserver')
                     console.log(err)
                 } else {
-                    res.status(201).send(`UPDATE ${given_name}`)
-                    console.log(results)
+                    res.redirect('http://localhost:3000')
+                    // res.status(201).send(`UPDATED ${given_name}`).redirect('http://localhost:3000')
+                    // console.log(results)
+                    // res.redirect('http://localhost:3000')
                 }
             })      
         } else {
-            res.status(200).send(`INSERT ${given_name}`)
-            console.log(results)
+            res.redirect('http://localhost:3000')
+            // res.status(200).send(`INSERT ${given_name}`).redirect('http://localhost:3000')
+            // console.log(results)
+            // res.redirect('http://localhost:3000')
         }
     })
   
 })
 
-app.use('/auth/logout', (req, res) => {
+app.get('/auth/logout', (req, res) => {
     req.session.destroy()
-    res.send("loutout")
+    res.redirect('http://localhost:3000')
+    // res.sendStatus(200)
     // console.log(req)
 })
 
 // END SESI LOGIN DENGAN GOOGLE
-
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-//     res.header("Access-Control-Allow-Credentials", true)
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-// });
-  
+app.get('/user', (req, res) => {
+    const accessToken = req.cookies["connect.sid"]
+    const sql = `SELECT name, email FROM user WHERE accessToken = "${accessToken}"`
+    db.query(sql, (err, response) => {
+        if (err) {
+            res.sendStatus(500)
+            console.log(err)
+        } else if (response == 0) {
+            res.status(404).send(response)
+        } else {
+            res.status(200).send({
+                "message": "mantap",
+                "results": response
+            })
+            console.log(response.length)
+        } 
+    })
+})
 
 app.get('/mylists', (req, res)=> {
       
@@ -103,20 +114,20 @@ app.get('/mylists', (req, res)=> {
         })
     })
 })
-// s:oja_P_kxX4us_ehPkivyQiVe0rS1UEAv.09Te/YCdy9tQFlO7jhSyryXwQqOSs+t1vw0oSiRS2cw
 
 app.post('/mylists', (req, res)=> {
     const accessToken = req.cookies["connect.sid"]
     const {task, warn} = req.body
     const sql = `INSERT INTO mylist (id, userId, task, warn) VALUES ("", (SELECT userId FROM user WHERE accessToken = "${accessToken}"), '${task}', '${warn}');`
     db.query(sql, (err, response)=> {
-        if (err) throw err
-        console.log(response)
+        if (err) {
+            res.status(500).send("User tidak ada")
+            console.log("User Tidak ada", response)
+        } else {
+            res.status(201).send("Berhasil!!")
+            console.log("Berhasil", response)
+        }
     })
-    // console.log(`${task} ${warn}`)
-    res.send({
-        message : "Post data berhasill !!!"
-    }) 
 })
 
 app.delete('/mylists', (req, res)=> {
@@ -133,36 +144,42 @@ app.delete('/mylists', (req, res)=> {
 })
 
 app.get('/mymemos', (req, res) => {
-    const sql = "SELECT * FROM mymemo"
+    const accessToken = req.cookies["connect.sid"]
+    const sql = `SELECT * FROM mymemo WHERE userId = (SELECT userId FROM user WHERE accessToken = "${accessToken}")`
     db.query(sql, (err, response) => {
-        if (err) throw err
-        res.send(response)
+        if (err) throw err 
+        res.send(response )
     })
 })
 
 app.post('/mymemos', (req, res)=> {
+    const accessToken = req.cookies["connect.sid"]
+    console.log(accessToken)
     const {title, description, time} = req.body
-    // const sql = "INSERT INTO `mylist`(`task`, `warn`, `color`) VALUES ('[value-1]','[value-2]','[value-3]')"
-    const sql = `INSERT INTO mymemo (title, description, time) VALUES ('${title}', '${description}', '${time}')`
+    const sql = `INSERT INTO mymemo (id, userId, title, description, time) VALUES ("", (SELECT userId FROM user WHERE accessToken = "${accessToken}"),'${title}', '${description}', '${time}')` 
     db.query(sql, (err, response)=> {
-        if (err) throw err
-        console.log(response)
+        if (err) {
+            res.status(404).send("User tidak ditemukan")
+            console.log(response)
+        } else {
+            res.status(200).send('Berhasil!!')
+            console.log(response)
+        }
     })
-    // console.log(`${title} ${description} ${time} `)
-    res.send({
-        message : "Post data berhasill !!!"
-    }) 
 })
 
 app.delete('/mymemos', (req, res)=> {
+    const accessToken = req.cookies["connect.sid"]
     const {title, description, time} = req.body
-    const sql = `DELETE FROM mymemo WHERE title = "${title}" AND description = "${description}" AND time = "${time}"`
+    const sql = `DELETE FROM mymemo WHERE title = "${title}" AND description = "${description}" AND userId = (SELECT userId FROM user WHERE accessToken = "${accessToken}")`
     db.query(sql, (err, response)=> { 
-        if (err) throw err
-        console.log(response)
-    })
-    res.send({
-        message : "Delete data berhasill !!!"
+        if (err) {
+            res.sendStatus(500)
+            console.log(response)
+        } else {
+            res.sendStatus(200)
+            console.log(response)
+        }
     })
 })
 

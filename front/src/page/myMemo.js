@@ -11,12 +11,18 @@ export function MyMemo(props) {
 
     const url = "http://localhost:3009/mymemos"
     useEffect(()=> {
-        fetch(url)
+        fetch(url, {
+            credentials: "include",
+          })
         .then(res => res.json())
-        .then(res => setDatas(res)) 
+        .then(res => {
+            console.log(res)
+            setDatas(res)
+        }
+        ) 
+        .then(setDoUpdate(false))
         .catch(err => console.log(err))
 
-        setDoUpdate(false)
     }, [doUpdate])
 
 
@@ -47,6 +53,8 @@ export function MyMemo(props) {
         <div className="  absolute  top-0 right-0 left-0 m-auto w-[85%]">
             {isBtnAddListOn ? <PostForm update={update}/> : null} 
         </div>
+
+console.log(datas, "datas")
 
     console.log(doUpdate)
     return(
@@ -85,10 +93,10 @@ function PostForm(props) {
  
     const waw = () => setTime(`${d.getFullYear()}`)
 
-
     const postForm = () => {
         fetch('http://localhost:3009/mymemos', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -98,7 +106,7 @@ function PostForm(props) {
                 time : `${time}`
             })
         })
-        .then(response => response.json())
+        // .then(response => response)
         .then(data => {
             console.log(data);
         })

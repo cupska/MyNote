@@ -10,8 +10,9 @@ export function Auth() {
                     <Logo/>
                 </div>
                 <div className=" flex justify-center ">
-                    <div className=" relative w-fit flex justify-center m-5">
-                        <a href="http://localhost:3009/auth/google" className="auth-btn w-20 p-4 whitespace-nowrap z-10" >Sign in with GOOGLE!</a>
+                    <div className=" relative w-fit flex flex-col items-center justify-center m-5 gap-3">
+                        <span>Sign in with GOOGLE!</span>
+                        <a href="http://localhost:3009/auth/google" className="auth-btn w-20 px-4 py-2 whitespace-nowrap z-10 rounded-xl font-bold text-center text-white bg-blue-600" >Sign in</a>
                     </div>
                 </div>
             </div>

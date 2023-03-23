@@ -1,14 +1,16 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 
-export function MyMemoCard (props) {
-    const data = useLocation()
-    const {title, description, time} = data.state
+export function MyMemoCard () {
+    const location = useLocation()
+    const {title, description, time} = location.state
+    const navigate = useNavigate()
 
     const deleteCard = () => {
         fetch("http://localhost:3009/mymemos", {
             method: "DELETE",
+            credentials: "include",
             headers: {
             'Content-Type': 'application/json'
             },
@@ -18,8 +20,12 @@ export function MyMemoCard (props) {
             "time" : time,
             })
         })
-        .then((res)=> res.json())
-        .then(res=> (console.log(res.message)))
+        .then(res => console.log(res))
+        .then(
+            setTimeout(() => {
+                navigate("/myMemo")
+            }, 500)
+            )
         .catch(err => console.log(err))
     }
 
@@ -36,9 +42,6 @@ export function MyMemoCard (props) {
             </div>
             <button className=" w-fit px-4 py-2 rounded-lg text-white bg-rose-600" onClick={() => {
                 deleteCard()
-                setTimeout(() => {
-                    window.history.back()
-                }, 1000);
             }}>Destroy</button>
 
         </div>

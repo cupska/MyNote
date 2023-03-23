@@ -13,7 +13,7 @@ export function MyList(props) {
         setDoUpdate(data)
         setIsBtnAddListOn(false)
     }
-      console.log(document.cookie);
+    //   console.log(document.cookie);
       
     const url = "http://localhost:3009/mylists"
     useEffect(()=> {
@@ -22,7 +22,10 @@ export function MyList(props) {
           })
         .then(res => res.json())
         // .then(datas => setDatas(datas.results))
-        .then(datas => setDatas(datas.results))
+        .then(datas => {
+            console.log("data Update")
+            setDatas(datas.results)
+        })
         .catch(error => {
             console.log(error)
         })
@@ -32,6 +35,7 @@ export function MyList(props) {
 
     // console.log(cookies)
     console.log(datas)
+    console.log(doUpdate)
     
     const cards = (
                 <>
