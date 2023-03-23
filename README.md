@@ -20,3 +20,6 @@ Tailwind css
 Node JS
 Express JS
 MYSQL
+
+Video Preview:
+https://youtu.be/WAoHtyrQfuc
