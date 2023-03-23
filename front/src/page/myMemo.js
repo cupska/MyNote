@@ -11,9 +11,18 @@ export function MyMemo(props) {
 
     const url = "http://localhost:3009/mymemos"
     useEffect(()=> {
-        fetch(url)
+        fetch(url, {
+            credentials: "include",
+          })
         .then(res => res.json())
-        .then(res => setDatas(res)) 
+        .then(res => {
+            console.log(res)
+            setDatas(res)
+        }
+        ) 
+        .then(setDoUpdate(false))
+        .catch(err => console.log(err))
+
     }, [doUpdate])
 
 
@@ -45,6 +54,9 @@ export function MyMemo(props) {
             {isBtnAddListOn ? <PostForm update={update}/> : null} 
         </div>
 
+console.log(datas, "datas")
+
+    console.log(doUpdate)
     return(
         <div className=" relative h-full w-full  py-5 px-2">
             {/* container card */}
@@ -77,15 +89,14 @@ function PostForm(props) {
 
     useEffect(() => {
         setTime(dates)
-    }, [])
+    }, [dates])
  
     const waw = () => setTime(`${d.getFullYear()}`)
-        // `${d.getDay()}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`)
-
 
     const postForm = () => {
         fetch('http://localhost:3009/mymemos', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -95,7 +106,7 @@ function PostForm(props) {
                 time : `${time}`
             })
         })
-        .then(response => response.json())
+        // .then(response => response)
         .then(data => {
             console.log(data);
         })
@@ -104,7 +115,7 @@ function PostForm(props) {
         });
     }
 
-    console.log(time)
+    // console.log(time)
     return (
         <form className=" flex flex-col w-full ring-2 mt-2 divide-y-2" onSubmit={(e)=> {
                 e.preventDefault()

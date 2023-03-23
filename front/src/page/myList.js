@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { BtnAdd } from "../components/button"
 import { CardList } from "../components/card"
 
@@ -13,18 +13,29 @@ export function MyList(props) {
         setDoUpdate(data)
         setIsBtnAddListOn(false)
     }
-        
+    //   console.log(document.cookie);
+      
     const url = "http://localhost:3009/mylists"
     useEffect(()=> {
-        fetch(url)
+        fetch(url, {
+            credentials: "include",
+          })
         .then(res => res.json())
-        .then(datas => setDatas(datas.results))
+        // .then(datas => setDatas(datas.results))
+        .then(datas => {
+            console.log("data Update")
+            setDatas(datas.results)
+        })
         .catch(error => {
             console.log(error)
         })
 
         setDoUpdate(false)
     },[doUpdate])
+
+    // console.log(cookies)
+    console.log(datas)
+    console.log(doUpdate)
     
     const cards = (
                 <>
@@ -77,6 +88,7 @@ function PostForm(props) {
     const postForm = async () => {
         fetch('http://localhost:3009/mylists', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
             },

@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react"
-import { Link, Outlet } from "react-router-dom"
 import { Logo } from "../../assets/svgviewer-react-output"
 
 
 
-export function Auth() {
-    const [authBtn, setAuthBtn] = useState("")
-
-
-
+export function Auth() {    
     return(
         <div className=" h-screen flex justify-center items-center">
             <div className= " px-5 py-10 rounded-xl bg-rose-200">
@@ -16,13 +10,11 @@ export function Auth() {
                     <Logo/>
                 </div>
                 <div className=" flex justify-center ">
-                    <div className=" relative w-fit flex justify-center m-5">
-                        <Link className=" auth-btn w-20 p-4 whitespace-nowrap z-10 " onClick={()=> setAuthBtn("")} to="signIn">Sign In</Link>
-                        <Link className=" auth-btn w-20 p-4 whitespace-nowrap z-10 " onClick={()=> setAuthBtn("translate-x-full ")} to="signUp">Sign Up</Link>
-                        <div id="auth-btn-indicator" className={` absolute  left-0 bottom-0 h-1 w-[50%] -z-0 ease-out  ${authBtn}  bg-amber-500 duration-300`}></div>
+                    <div className=" relative w-fit flex flex-col items-center justify-center m-5 gap-3">
+                        <span>Sign in with GOOGLE!</span>
+                        <a href="http://localhost:3009/auth/google" className="auth-btn w-20 px-4 py-2 whitespace-nowrap z-10 rounded-xl font-bold text-center text-white bg-blue-600" >Sign in</a>
                     </div>
                 </div>
-                <Outlet/>
             </div>
         </div>
     )
